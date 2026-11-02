@@ -8,6 +8,7 @@ import ArticleEdit from './pages/ArticleEdit';
 import ArticleDetail from './pages/ArticleDetail';
 import GifNew from './pages/GifNew';
 import GifDetail from './pages/GifDetail';
+import CreateUser from './pages/CreateUser';
 
 export default function App() {
   return (
@@ -25,7 +26,7 @@ export default function App() {
       </Route>
       <Route element={<ProtectedRoute adminOnly />}>
         <Route element={<Layout />}>
-          {/* next branch: /admin/create-user */}
+          <Route path="admin/create-user" element={<CreateUser />} />
         </Route>
       </Route>
       <Route path="*" element={<p>Page not found.</p>} />
