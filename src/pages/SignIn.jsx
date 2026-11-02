@@ -1,69 +1,52 @@
 import { useState } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
-function SignIn() {
+export default function SignIn() {
+  const { user, signIn } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  if (user) return <Navigate to="/" replace />;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
-      const res = await fetch(`${API_URL}/auth/signin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const body = await res.json();
-
-      if (!res.ok) {
-        setError(body.error);
-      } else {
-        localStorage.setItem('token', body.data.token);
-        setError('');
-        console.log('Signed in, token saved');
-      }
+      await signIn(email, password);
+      navigate(location.state?.from?.pathname || '/', { replace: true });
     } catch (err) {
-      setError('Could not reach the server. Try again in a moment.');
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Sign in</h2>
+    <main className="auth-page">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <h1>Teamwork</h1>
+        <h2>Sign in</h2>
 
-      <label htmlFor="email">Email</label>
-      <input
-        id="email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
+        <label htmlFor="email">Email</label>
+        <input id="email" type="email" value={email} required
+          onChange={(e) => setEmail(e.target.value)} />
 
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+        <label htmlFor="password">Password</label>
+        <input id="password" type="password" value={password} required
+          onChange={(e) => setPassword(e.target.value)} />
 
-      {error && <p role="alert">{error}</p>}
+        {error && <p role="alert" className="form-error">{error}</p>}
 
-      <button type="submit" disabled={loading}>
-        {loading ? 'Signing in...' : 'Sign in'}
-      </button>
-    </form>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Signing in...' : 'Sign in'}
+        </button>
+      </form>
+    </main>
   );
 }
-
-export default SignIn;
