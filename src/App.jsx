@@ -6,6 +6,8 @@ import Feed from './pages/Feed';
 import ArticleNew from './pages/ArticleNew';
 import ArticleEdit from './pages/ArticleEdit';
 import ArticleDetail from './pages/ArticleDetail';
+import GifNew from './pages/GifNew';
+import GifDetail from './pages/GifDetail';
 
 export default function App() {
   return (
@@ -17,6 +19,8 @@ export default function App() {
           <Route path="articles/new" element={<ArticleNew />} />
           <Route path="articles/:id" element={<ArticleDetail />} />
           <Route path="articles/:id/edit" element={<ArticleEdit />} />
+          <Route path="gifs/new" element={<GifNew />} />
+          <Route path="gifs/:id" element={<GifDetail />} />
         </Route>
       </Route>
       <Route element={<ProtectedRoute adminOnly />}>
