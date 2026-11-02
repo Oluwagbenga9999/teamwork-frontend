@@ -3,6 +3,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import SignIn from './pages/SignIn';
 import Feed from './pages/Feed';
+import ArticleNew from './pages/ArticleNew';
+import ArticleEdit from './pages/ArticleEdit';
+import ArticleDetail from './pages/ArticleDetail';
 
 export default function App() {
   return (
@@ -11,7 +14,9 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route index element={<Feed />} />
-          {/* next branches: /articles/new, /articles/:id, /gifs/new, /gifs/:id */}
+          <Route path="articles/new" element={<ArticleNew />} />
+          <Route path="articles/:id" element={<ArticleDetail />} />
+          <Route path="articles/:id/edit" element={<ArticleEdit />} />
         </Route>
       </Route>
       <Route element={<ProtectedRoute adminOnly />}>
